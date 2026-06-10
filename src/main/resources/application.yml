@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: mcp-agent-runtime
+
+mcp:
+  server:
+    endpoint: /mcp
+    server-name: mcp-agent-runtime
+    server-version: 0.0.1
+
+tool:
+  ratelimit:
+    default: 60
