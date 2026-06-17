@@ -24,14 +24,11 @@ public class WorkerAgent {
 
     private static final Logger log = LoggerFactory.getLogger(WorkerAgent.class);
 
-    private final ToolExecutorRouter executorRouter;
     private final AsyncTaskRegistry taskRegistry;
     private final ApplicationEventPublisher eventPublisher;
 
-    public WorkerAgent(ToolExecutorRouter executorRouter,
-                       AsyncTaskRegistry taskRegistry,
+    public WorkerAgent(AsyncTaskRegistry taskRegistry,
                        ApplicationEventPublisher eventPublisher) {
-        this.executorRouter = executorRouter;
         this.taskRegistry = taskRegistry;
         this.eventPublisher = eventPublisher;
     }
@@ -58,7 +55,12 @@ public class WorkerAgent {
                 .context(event.getContext())
                 .build();
 
-            ToolExecutionResult result = executorRouter.execute(def, ctx);
+            // 直调 executor，不走 ToolExecutorRouter（避免 longRunning 标记再次触发异步分支）
+            long start = System.nanoTime();
+            Object output = def.getExecutor().execute(ctx);
+            long elapsed = System.nanoTime() - start;
+            ToolExecutionResult result = ToolExecutionResult.success(
+                def.getName(), output, elapsed, ctx);
 
             taskRegistry.complete(taskId, result);
 

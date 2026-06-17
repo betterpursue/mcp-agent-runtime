@@ -1,11 +1,9 @@
 package com.mcpruntime.agent;
 
 import com.mcpruntime.agent.event.AsyncTaskEvent;
-import com.mcpruntime.agent.event.TaskCompletedEvent;
 import com.mcpruntime.agent.orchestrator.OrchestratorAgent;
 import com.mcpruntime.agent.worker.AsyncTaskRegistry;
 import com.mcpruntime.core.registry.*;
-import com.mcpruntime.core.schema.JsonSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationEventPublisher;
@@ -13,9 +11,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -215,11 +210,6 @@ class OrchestratorWorkerTest {
 
     @Test
     void fullAsyncFlow() throws Exception {
-        CountDownLatch latch = new CountDownLatch(1);
-        AtomicReference<TaskCompletedEvent> capturedEvent = new AtomicReference<>();
-
-        // Create a worker that captures the completion event
-        // We'll use a simple approach: manually trigger the flow
         ToolDefinition tool = longRunningTool("slow_tool", ctx -> {
             Thread.sleep(100);
             return "slow result";
