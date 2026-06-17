@@ -1,17 +1,23 @@
 package com.mcpruntime.core.registry;
 
-import com.mcpruntime.core.registry.exception.ToolExecutionException;
+import com.mcpruntime.agent.worker.AsyncTaskRegistry;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ToolExecutorRouterTest {
 
-    private final ToolExecutorRouter router = new ToolExecutorRouter();
+    private ToolExecutorRouter router;
+
+    @BeforeEach
+    void setUp() {
+        AsyncTaskRegistry registry = new AsyncTaskRegistry();
+        router = new ToolExecutorRouter(event -> {}, registry);
+    }
 
     @Test
     void shouldExecuteToolSuccessfully() {

@@ -9,11 +9,13 @@ public class ToolMetadata {
     private final Duration timeout;
     private final String owner;
     private final String version;
+    private final boolean longRunning;
 
     private ToolMetadata(Builder builder) {
         this.timeout = builder.timeout;
         this.owner = builder.owner;
         this.version = builder.version;
+        this.longRunning = builder.longRunning;
     }
 
     public static Builder builder() {
@@ -32,10 +34,15 @@ public class ToolMetadata {
         return version;
     }
 
+    public boolean isLongRunning() {
+        return longRunning;
+    }
+
     public static class Builder {
         private Duration timeout = Duration.ofSeconds(30);
         private String owner = "unknown";
         private String version = "0.0.1";
+        private boolean longRunning = false;
 
         public Builder timeout(Duration timeout) {
             this.timeout = timeout;
@@ -49,6 +56,11 @@ public class ToolMetadata {
 
         public Builder version(String version) {
             this.version = version;
+            return this;
+        }
+
+        public Builder longRunning(boolean longRunning) {
+            this.longRunning = longRunning;
             return this;
         }
 

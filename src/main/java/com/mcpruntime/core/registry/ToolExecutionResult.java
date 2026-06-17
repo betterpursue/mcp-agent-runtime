@@ -42,6 +42,21 @@ public class ToolExecutionResult {
             .build();
     }
 
+    /**
+     * Create a placeholder result indicating the tool was dispatched
+     * to an async worker. The actual result arrives later via
+     * {@link com.mcpruntime.agent.event.TaskCompletedEvent}.
+     */
+    public static ToolExecutionResult asyncSubmitted(String toolName, String taskId,
+                                                      ToolExecutionContext ctx) {
+        return new Builder()
+            .toolName(toolName)
+            .success(true)
+            .result("[Task submitted: " + taskId + ". The result will be available shortly.]")
+            .context(ctx)
+            .build();
+    }
+
     public String getToolName() {
         return toolName;
     }
